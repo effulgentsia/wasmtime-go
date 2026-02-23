@@ -1,5 +1,8 @@
 #include "_cgo_export.h"
 #include "shims.h"
+#if !defined(_WIN32)
+#include <dlfcn.h>
+#endif
 
 wasmtime_store_t *go_store_new(wasm_engine_t *engine, size_t env) {
   return wasmtime_store_new(engine, (void*) env, goFinalizeStore);
@@ -65,6 +68,24 @@ wasmtime_error_t *go_linker_define_func(
 
 bool go_externref_new(wasmtime_context_t *cx, size_t env, wasmtime_externref_t *ref) {
   return wasmtime_externref_new(cx, (void*) env, goFinalizeExternref, ref);
+}
+
+typedef void (*go_gc_support_set_t)(wasm_config_t *, bool);
+
+void go_wasmtime_config_gc_support_set(wasm_config_t *config, bool enable) {
+#if !defined(_WIN32)
+  static int looked_up = 0;
+  static go_gc_support_set_t fn = NULL;
+  if (!looked_up) {
+    looked_up = 1;
+    fn = (go_gc_support_set_t) dlsym(RTLD_DEFAULT, "wasmtime_config_gc_support_set");
+  }
+  if (fn != NULL) {
+    fn(config, enable);
+    return;
+  }
+#endif
+  wasmtime_config_wasm_gc_set(config, enable);
 }
 
 #define UNION_ACCESSOR(name, field, ty) \

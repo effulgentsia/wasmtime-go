@@ -1,5 +1,6 @@
 package wasmtime
 
+// #include "shims.h"
 // #include <wasm.h>
 // #include <wasmtime.h>
 // #include <stdlib.h>
@@ -140,6 +141,19 @@ func (cfg *Config) SetWasmFunctionReferences(enabled bool) {
 // SetWasmGC configures whether garbage collection is enabled
 func (cfg *Config) SetWasmGC(enabled bool) {
 	C.wasmtime_config_wasm_gc_set(cfg.ptr(), C.bool(enabled))
+	runtime.KeepAlive(cfg)
+}
+
+// SetGCSupport enables or disables GC support in Wasmtime entirely.
+func (cfg *Config) SetGCSupport(enabled bool) {
+	C.go_wasmtime_config_gc_support_set(cfg.ptr(), C.bool(enabled))
+	runtime.KeepAlive(cfg)
+}
+
+// SetWasmComponentModel configures whether the wasm component model proposal is
+// enabled.
+func (cfg *Config) SetWasmComponentModel(enabled bool) {
+	C.wasmtime_config_wasm_component_model_set(cfg.ptr(), C.bool(enabled))
 	runtime.KeepAlive(cfg)
 }
 
