@@ -14,6 +14,7 @@ wasmtime_error_t *go_linker_define_func(
     size_t env
 );
 bool go_externref_new(wasmtime_context_t *cx, size_t env, wasmtime_externref_t *ref);
+void go_wasmtime_config_gc_support_set(wasm_config_t *config, bool enable);
 
 #define EACH_UNION_ACCESSOR(name) \
   UNION_ACCESSOR(wasmtime_val, i32, int32_t) \

@@ -1,5 +1,6 @@
 package wasmtime
 
+// #include "shims.h"
 // #include <wasm.h>
 // #include <wasmtime.h>
 // #include <stdlib.h>
@@ -145,7 +146,7 @@ func (cfg *Config) SetWasmGC(enabled bool) {
 
 // SetGCSupport enables or disables GC support in Wasmtime entirely.
 func (cfg *Config) SetGCSupport(enabled bool) {
-	C.wasmtime_config_gc_support_set(cfg.ptr(), C.bool(enabled))
+	C.go_wasmtime_config_gc_support_set(cfg.ptr(), C.bool(enabled))
 	runtime.KeepAlive(cfg)
 }
 
