@@ -1,5 +1,4 @@
 //go:build !no_feat_parallel_compilation
-// +build !no_feat_parallel_compilation
 
 package wasmtime
 

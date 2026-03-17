@@ -1,5 +1,4 @@
 //go:build !no_feat_cache
-// +build !no_feat_cache
 
 package wasmtime
 

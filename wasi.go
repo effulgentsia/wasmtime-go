@@ -1,5 +1,4 @@
 //go:build !no_feat_wasi
-// +build !no_feat_wasi
 
 package wasmtime
 

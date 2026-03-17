@@ -1,5 +1,4 @@
 //go:build !no_feat_threads
-// +build !no_feat_threads
 
 package wasmtime
 

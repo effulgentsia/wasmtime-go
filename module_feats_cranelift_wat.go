@@ -1,5 +1,4 @@
 //go:build !no_feat_cranelift && !no_feat_wat
-// +build !no_feat_cranelift,!no_feat_wat
 
 package wasmtime
 
