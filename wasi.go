@@ -1,3 +1,6 @@
+//go:build !wasmtime_min_build
+// +build !wasmtime_min_build
+
 package wasmtime
 
 // #include <wasi.h>
