@@ -14,6 +14,11 @@ import (
 // NewModule compiles a new `Module` from the `wasm` provided with the given configuration
 // in `engine`.
 func NewModule(engine *Engine, wasm []byte) (*Module, error) {
+	// We can't create the `wasm_byte_vec_t` here and pass it in because
+	// that runs into the error of "passed a pointer to a pointer" because
+	// the vec itself is passed by pointer and it contains a pointer to
+	// `wasm`. To work around this we insert some C shims above and call
+	// them.
 	var wasmPtr *C.uint8_t
 	if len(wasm) > 0 {
 		wasmPtr = (*C.uint8_t)(unsafe.Pointer(&wasm[0]))
@@ -31,7 +36,7 @@ func NewModule(engine *Engine, wasm []byte) (*Module, error) {
 }
 
 // ModuleValidate validates whether `wasm` would be a valid wasm module according to the
-// configuration in `engine`
+// configuration in `store`
 func ModuleValidate(engine *Engine, wasm []byte) error {
 	var wasmPtr *C.uint8_t
 	if len(wasm) > 0 {
