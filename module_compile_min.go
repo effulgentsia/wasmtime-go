@@ -1,24 +1,24 @@
-//go:build wasmtime_min_build
-// +build wasmtime_min_build
+//go:build !wasmtime_cranelift
+// +build !wasmtime_cranelift
 
 package wasmtime
 
 import "fmt"
 
-var errHeadlessCompile = fmt.Errorf("module compilation unavailable (headless runtime)")
+var errNoCranelift = fmt.Errorf("module compilation unavailable (requires cranelift feature)")
 
-// NewModule is unavailable in the headless runtime. Use NewModuleDeserialize
-// to load a pre-compiled module instead.
+// NewModule is unavailable without the cranelift feature. Use
+// NewModuleDeserialize to load a pre-compiled module instead.
 func NewModule(engine *Engine, wasm []byte) (*Module, error) {
-	return nil, errHeadlessCompile
+	return nil, errNoCranelift
 }
 
-// ModuleValidate is unavailable in the headless runtime.
+// ModuleValidate is unavailable without the cranelift feature.
 func ModuleValidate(engine *Engine, wasm []byte) error {
-	return errHeadlessCompile
+	return errNoCranelift
 }
 
-// Serialize is unavailable in the headless runtime.
+// Serialize is unavailable without the cranelift feature.
 func (m *Module) Serialize() ([]byte, error) {
-	return nil, errHeadlessCompile
+	return nil, errNoCranelift
 }

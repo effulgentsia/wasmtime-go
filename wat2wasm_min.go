@@ -1,12 +1,11 @@
-//go:build wasmtime_min_build
-// +build wasmtime_min_build
+//go:build !wasmtime_wat
+// +build !wasmtime_wat
 
 package wasmtime
 
 import "fmt"
 
-// Wat2Wasm is unavailable in the headless runtime because the WAT parser
-// requires the compiler feature.
+// Wat2Wasm is unavailable without the wat feature.
 func Wat2Wasm(wat string) ([]byte, error) {
-	return nil, fmt.Errorf("wat2wasm unavailable (headless runtime)")
+	return nil, fmt.Errorf("wat2wasm unavailable (requires wat feature)")
 }

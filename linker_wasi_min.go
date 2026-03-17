@@ -1,11 +1,11 @@
-//go:build wasmtime_min_build
-// +build wasmtime_min_build
+//go:build !wasmtime_wasi
+// +build !wasmtime_wasi
 
 package wasmtime
 
 import "fmt"
 
-// DefineWasi is unavailable in the headless runtime.
+// DefineWasi is unavailable without the wasi feature.
 func (l *Linker) DefineWasi() error {
-	return fmt.Errorf("WASI unavailable (headless runtime)")
+	return fmt.Errorf("WASI unavailable (requires wasi feature)")
 }

@@ -16,29 +16,40 @@ It's also worth pointing out that the authors of this package up to this point
 primarily work in Rust, so if you've got suggestions of how to make this package
 more idiomatic for Go we'd love to hear your thoughts!
 
-# Headless / Minimal Build
+# Feature Build Tags
 
-This package supports linking against a minimal (headless) Wasmtime library
-that omits the compiler and WASI subsystems. To use this mode, build with the
-wasmtime_min_build tag:
+This package uses Go build tags that correspond to Wasmtime's Cargo features
+(see https://github.com/bytecodealliance/wasmtime/blob/main/Cargo.toml). Each
+tag enables the Go bindings for the corresponding C API symbols. When a tag is
+absent, the associated functions become no-ops or return errors, so the
+application does not need to provide C stubs.
 
-	go build -tags wasmtime_min_build
+Build with the tags that match the features your Wasmtime C library was built
+with. For a full build:
 
-In this mode the following restrictions apply:
+	go build -tags "wasmtime_cranelift,wasmtime_wat,wasmtime_wasi,wasmtime_cache,wasmtime_parallel_compilation,wasmtime_threads"
 
-  - Module compilation is unavailable: [NewModule], [NewModuleFromFile], and
-    [ModuleValidate] return errors. Use [NewModuleDeserialize] or
-    [NewModuleDeserializeFile] with a pre-compiled module instead.
-  - [Module.Serialize] returns an error.
-  - [Wat2Wasm] returns an error.
-  - Compiler configuration methods ([Config.SetStrategy],
-    [Config.SetCraneliftOptLevel], [Config.SetCraneliftDebugVerifier],
-    [Config.SetCraneliftNanCanonicalization], [Config.SetParallelCompilation],
-    [Config.EnableCraneliftFlag], [Config.SetCraneliftFlag],
-    [Config.SetWasmThreads]) are no-ops.
-  - [Config.CacheConfigLoadDefault] and [Config.CacheConfigLoad] return errors.
-  - All WASI functions ([NewWasiConfig], [WasiConfig] methods,
-    [Linker.DefineWasi], [Store.SetWasi]) are stubs that either no-op or return
-    errors.
+For a minimal (headless) build with no features, simply omit all tags:
+
+	go build
+
+The available tags and their effects when absent are:
+
+  - wasmtime_cranelift: Without this tag, [NewModule], [NewModuleFromFile],
+    [ModuleValidate], and [Module.Serialize] return errors. Use
+    [NewModuleDeserialize] or [NewModuleDeserializeFile] with a pre-compiled
+    module instead. [Config.SetStrategy], [Config.SetCraneliftOptLevel],
+    [Config.SetCraneliftDebugVerifier],
+    [Config.SetCraneliftNanCanonicalization], [Config.EnableCraneliftFlag],
+    and [Config.SetCraneliftFlag] become no-ops.
+  - wasmtime_wat: Without this tag, [Wat2Wasm] returns an error.
+  - wasmtime_wasi: Without this tag, [NewWasiConfig], [WasiConfig] methods,
+    [Linker.DefineWasi], and [Store.SetWasi] are stubs that either no-op
+    or return errors.
+  - wasmtime_cache: Without this tag, [Config.CacheConfigLoadDefault] and
+    [Config.CacheConfigLoad] return errors.
+  - wasmtime_parallel_compilation: Without this tag,
+    [Config.SetParallelCompilation] is a no-op.
+  - wasmtime_threads: Without this tag, [Config.SetWasmThreads] is a no-op.
 */
 package wasmtime

@@ -1,17 +1,17 @@
-//go:build wasmtime_min_build
-// +build wasmtime_min_build
+//go:build !wasmtime_wasi
+// +build !wasmtime_wasi
 
 package wasmtime
 
 import "fmt"
 
-// WasiConfig represents WASI configuration. In the headless runtime all
+// WasiConfig represents WASI configuration. Without the wasi feature all
 // methods are stubs that return errors or are no-ops.
 type WasiConfig struct {
 	_closed bool
 }
 
-// NewWasiConfig creates a new WasiConfig. In the headless runtime the
+// NewWasiConfig creates a new WasiConfig. Without the wasi feature the
 // returned object is a lightweight stub.
 func NewWasiConfig() *WasiConfig {
 	return &WasiConfig{}
@@ -24,45 +24,45 @@ func (c *WasiConfig) ptr() uintptr {
 	return 0
 }
 
-// Close is a no-op in the headless runtime.
+// Close is a no-op without the wasi feature.
 func (c *WasiConfig) Close() {
 	c._closed = true
 }
 
-// SetArgv is a no-op in the headless runtime.
+// SetArgv is a no-op without the wasi feature.
 func (c *WasiConfig) SetArgv(argv []string) {}
 
-// InheritArgv is a no-op in the headless runtime.
+// InheritArgv is a no-op without the wasi feature.
 func (c *WasiConfig) InheritArgv() {}
 
-// SetEnv is a no-op in the headless runtime.
+// SetEnv is a no-op without the wasi feature.
 func (c *WasiConfig) SetEnv(keys, values []string) {}
 
-// InheritEnv is a no-op in the headless runtime.
+// InheritEnv is a no-op without the wasi feature.
 func (c *WasiConfig) InheritEnv() {}
 
-// SetStdinFile is unavailable in the headless runtime.
+// SetStdinFile is unavailable without the wasi feature.
 func (c *WasiConfig) SetStdinFile(path string) error {
-	return fmt.Errorf("WASI unavailable (headless runtime)")
+	return fmt.Errorf("WASI unavailable (requires wasi feature)")
 }
 
-// InheritStdin is a no-op in the headless runtime.
+// InheritStdin is a no-op without the wasi feature.
 func (c *WasiConfig) InheritStdin() {}
 
-// SetStdoutFile is unavailable in the headless runtime.
+// SetStdoutFile is unavailable without the wasi feature.
 func (c *WasiConfig) SetStdoutFile(path string) error {
-	return fmt.Errorf("WASI unavailable (headless runtime)")
+	return fmt.Errorf("WASI unavailable (requires wasi feature)")
 }
 
-// InheritStdout is a no-op in the headless runtime.
+// InheritStdout is a no-op without the wasi feature.
 func (c *WasiConfig) InheritStdout() {}
 
-// SetStderrFile is unavailable in the headless runtime.
+// SetStderrFile is unavailable without the wasi feature.
 func (c *WasiConfig) SetStderrFile(path string) error {
-	return fmt.Errorf("WASI unavailable (headless runtime)")
+	return fmt.Errorf("WASI unavailable (requires wasi feature)")
 }
 
-// InheritStderr is a no-op in the headless runtime.
+// InheritStderr is a no-op without the wasi feature.
 func (c *WasiConfig) InheritStderr() {}
 
 // WasiDirPerms represents directory permissions for WASI.
@@ -78,7 +78,7 @@ const (
 	FILE_WRITE WasiFilePerms = 0x2
 )
 
-// PreopenDir is unavailable in the headless runtime.
+// PreopenDir is unavailable without the wasi feature.
 func (c *WasiConfig) PreopenDir(path, guestPath string, dirPerms WasiDirPerms, filePerms WasiFilePerms) error {
-	return fmt.Errorf("WASI unavailable (headless runtime)")
+	return fmt.Errorf("WASI unavailable (requires wasi feature)")
 }

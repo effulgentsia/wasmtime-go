@@ -1,5 +1,5 @@
-//go:build !wasmtime_min_build
-// +build !wasmtime_min_build
+//go:build wasmtime_cranelift
+// +build wasmtime_cranelift
 
 package wasmtime
 
@@ -10,30 +10,6 @@ import (
 	"runtime"
 	"unsafe"
 )
-
-// SetWasmThreads configures whether the wasm threads proposal is enabled
-func (cfg *Config) SetWasmThreads(enabled bool) {
-	C.wasmtime_config_wasm_threads_set(cfg.ptr(), C.bool(enabled))
-	runtime.KeepAlive(cfg)
-}
-
-// SetParallelCompilation configures whether compilation should use multiple threads
-func (cfg *Config) SetParallelCompilation(enabled bool) {
-	C.wasmtime_config_parallel_compilation_set(cfg.ptr(), C.bool(enabled))
-	runtime.KeepAlive(cfg)
-}
-
-// SetCraneliftNanCanonicalization configures whether whether Cranelift should perform a
-// NaN-canonicalization pass.
-//
-// When Cranelift is used as a code generation backend this will configure it to replace NaNs with a single
-// canonical value. This is useful for users requiring entirely deterministic WebAssembly computation.
-//
-// This is not required by the WebAssembly spec, so it is not enabled by default.
-func (cfg *Config) SetCraneliftNanCanonicalization(enabled bool) {
-	C.wasmtime_config_cranelift_nan_canonicalization_set(cfg.ptr(), C.bool(enabled))
-	runtime.KeepAlive(cfg)
-}
 
 // SetStrategy configures what compilation strategy is used to compile wasm code
 func (cfg *Config) SetStrategy(strat Strategy) {
@@ -54,34 +30,16 @@ func (cfg *Config) SetCraneliftOptLevel(level OptLevel) {
 	runtime.KeepAlive(cfg)
 }
 
-// CacheConfigLoadDefault enables compiled code caching for this `Config` using the default settings
-// configuration can be found.
+// SetCraneliftNanCanonicalization configures whether whether Cranelift should perform a
+// NaN-canonicalization pass.
 //
-// For more information about caching see
-// https://bytecodealliance.github.io/wasmtime/cli-cache.html
-func (cfg *Config) CacheConfigLoadDefault() error {
-	err := C.wasmtime_config_cache_config_load(cfg.ptr(), nil)
-	runtime.KeepAlive(cfg)
-	if err != nil {
-		return mkError(err)
-	}
-	return nil
-}
-
-// CacheConfigLoad enables compiled code caching for this `Config` using the settings specified
-// in the configuration file `path`.
+// When Cranelift is used as a code generation backend this will configure it to replace NaNs with a single
+// canonical value. This is useful for users requiring entirely deterministic WebAssembly computation.
 //
-// For more information about caching and configuration options see
-// https://bytecodealliance.github.io/wasmtime/cli-cache.html
-func (cfg *Config) CacheConfigLoad(path string) error {
-	cstr := C.CString(path)
-	err := C.wasmtime_config_cache_config_load(cfg.ptr(), cstr)
-	C.free(unsafe.Pointer(cstr))
+// This is not required by the WebAssembly spec, so it is not enabled by default.
+func (cfg *Config) SetCraneliftNanCanonicalization(enabled bool) {
+	C.wasmtime_config_cranelift_nan_canonicalization_set(cfg.ptr(), C.bool(enabled))
 	runtime.KeepAlive(cfg)
-	if err != nil {
-		return mkError(err)
-	}
-	return nil
 }
 
 // EnableCraneliftFlag enables a target-specific flag in Cranelift.
