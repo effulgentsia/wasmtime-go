@@ -1,3 +1,5 @@
+//go:build !no_feat_wat
+
 package wasmtime
 
 // #include <wasmtime.h>

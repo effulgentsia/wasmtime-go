@@ -1,3 +1,5 @@
+//go:build !no_feat_wasi
+
 package wasmtime
 
 // #include <wasi.h>
