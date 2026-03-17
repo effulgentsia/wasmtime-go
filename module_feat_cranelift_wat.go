@@ -1,6 +1,5 @@
-//go:build ((!minimal && !no_cranelift) || cranelift) && ((!minimal && !no_wat) || wat)
-// +build !minimal,!no_cranelift cranelift
-// +build !minimal,!no_wat wat
+//go:build !no_feat_cranelift && !no_feat_wat
+// +build !no_feat_cranelift,!no_feat_wat
 
 package wasmtime
 

@@ -1,5 +1,5 @@
-//go:build (!minimal && !no_wasi) || wasi
-// +build !minimal,!no_wasi wasi
+//go:build !no_feat_wasi
+// +build !no_feat_wasi
 
 package wasmtime
 

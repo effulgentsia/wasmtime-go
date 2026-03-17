@@ -1,5 +1,5 @@
-//go:build (!minimal && !no_cache) || cache
-// +build !minimal,!no_cache cache
+//go:build !no_feat_cache
+// +build !no_feat_cache
 
 package wasmtime
 
