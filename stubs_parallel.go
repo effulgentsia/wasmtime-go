@@ -1,5 +1,6 @@
-//go:build wasmtime_minimal && !wasmtime_parallel_compilation
-// +build wasmtime_minimal,!wasmtime_parallel_compilation
+//go:build (minimal || no_parallel_compilation) && !parallel_compilation
+// +build !parallel_compilation
+// +build minimal no_parallel_compilation
 
 package wasmtime
 

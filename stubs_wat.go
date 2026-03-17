@@ -1,5 +1,6 @@
-//go:build wasmtime_minimal && !wasmtime_wat
-// +build wasmtime_minimal,!wasmtime_wat
+//go:build (minimal || no_wat) && !wat
+// +build !wat
+// +build minimal no_wat
 
 package wasmtime
 

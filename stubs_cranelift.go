@@ -1,5 +1,6 @@
-//go:build wasmtime_minimal && !wasmtime_cranelift
-// +build wasmtime_minimal,!wasmtime_cranelift
+//go:build (minimal || no_cranelift) && !cranelift
+// +build !cranelift
+// +build minimal no_cranelift
 
 package wasmtime
 
