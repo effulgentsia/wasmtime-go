@@ -1,5 +1,5 @@
-//go:build !wasmtime_wasi
-// +build !wasmtime_wasi
+//go:build wasmtime_minimal && !wasmtime_wasi
+// +build wasmtime_minimal,!wasmtime_wasi
 
 package wasmtime
 

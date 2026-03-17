@@ -1,5 +1,5 @@
-//go:build !wasmtime_threads
-// +build !wasmtime_threads
+//go:build wasmtime_minimal && !wasmtime_threads
+// +build wasmtime_minimal,!wasmtime_threads
 
 package wasmtime
 
