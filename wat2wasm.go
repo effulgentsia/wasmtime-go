@@ -1,3 +1,6 @@
+//go:build (!minimal && !no_wat) || wat
+// +build !minimal,!no_wat wat
+
 package wasmtime
 
 // #include <wasmtime.h>

@@ -1,3 +1,6 @@
+//go:build (!minimal && !no_wasi) || wasi
+// +build !minimal,!no_wasi wasi
+
 package wasmtime
 
 // #include <wasi.h>
