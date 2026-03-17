@@ -1,6 +1,3 @@
-//go:build wasmtime_wat
-// +build wasmtime_wat
-
 package wasmtime
 
 // #include <wasmtime.h>
