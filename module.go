@@ -154,4 +154,3 @@ func NewModuleDeserializeFile(engine *Engine, path string) (*Module, error) {
 
 	return mkModule(ptr), nil
 }
-
