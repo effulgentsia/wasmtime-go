@@ -17,7 +17,6 @@ func TestWasmtimeMinAOT_Produce(t *testing.T) {
 
 	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
-	cfg.SetWasmGC(false)
 	cfg.SetWasmThreads(false)
 	cfg.SetWasmComponentModel(false)
 	engine := wasmtime.NewEngineWithConfig(cfg)

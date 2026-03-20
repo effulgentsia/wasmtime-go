@@ -13,7 +13,6 @@ import (
 func TestWasmtimeMinAOT_Load(t *testing.T) {
 	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
-	cfg.SetWasmGC(false)
 	engine := wasmtime.NewEngineWithConfig(cfg)
 	module, err := wasmtime.NewModuleDeserializeFile(engine, "module.cwasm")
 	require.NoError(t, err)
