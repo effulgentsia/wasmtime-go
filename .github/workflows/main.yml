@@ -72,6 +72,12 @@ jobs:
       shell: bash
       run: ./ci/test-vendoring.sh
       if: runner.os != 'Windows'
+    # May fail on Wasmtime v42 minimal libs (engine/GC); see ci/wasmtime-min-aot.md
+    - name: Test wasmtime min AOT on *nix
+      shell: bash
+      continue-on-error: true
+      run: ./ci/test-wasmtime-min.sh
+      if: runner.os != 'Windows'
 
   coverage:
     runs-on: ubuntu-latest
