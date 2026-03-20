@@ -1,19 +1,17 @@
-//go:build !min
+//go:build ignore
 
-package testminimalruntime_test
+package main
 
 import (
+	"log"
 	"os"
-	"testing"
-
-	"github.com/stretchr/testify/require"
 
 	"github.com/bytecodealliance/wasmtime-go/v42"
 )
 
-func TestCompile(t *testing.T) {
+func main() {
 	wasm, err := wasmtime.Wat2Wasm(`(module (func (export "test")))`)
-	require.NoError(t, err)
+	check(err)
 
 	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
@@ -21,11 +19,17 @@ func TestCompile(t *testing.T) {
 	cfg.SetWasmComponentModel(false)
 	engine := wasmtime.NewEngineWithConfig(cfg)
 	module, err := wasmtime.NewModule(engine, wasm)
-	require.NoError(t, err)
+	check(err)
 	defer module.Close()
 
 	artifact, err := module.Serialize()
-	require.NoError(t, err)
+	check(err)
 
-	require.NoError(t, os.WriteFile("module.cwasm", artifact, 0o644))
+	check(os.WriteFile("module.cwasm", artifact, 0o644))
+}
+
+func check(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
