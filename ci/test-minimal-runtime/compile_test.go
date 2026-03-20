@@ -1,4 +1,6 @@
-package aotproduce_test
+//go:build !min
+
+package testminimalruntime_test
 
 import (
 	"os"
@@ -15,7 +17,7 @@ import (
 func TestWasmtimeMinAOT_Produce(t *testing.T) {
 	dir := os.Getenv("WASMTIME_TEST_AOT_DIR")
 	if dir == "" {
-		dir = "test-wasmtime-min"
+		dir = filepath.Join("ci", "test-minimal-runtime")
 	}
 	require.NoError(t, os.MkdirAll(dir, 0o755))
 

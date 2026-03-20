@@ -2,11 +2,11 @@
 
 // External tests for package wasmtime. The import path matches go.mod’s module
 // path; it refers to this repository’s root package, not a remote version.
-// Running `go test -tags min ./minload/` compiles github.com/.../wasmtime-go/v42
+// Running `go test -tags min ./ci/test-minimal-runtime/` compiles github.com/.../wasmtime-go/v42
 // (the parent module) with the `min` build tag, so `//go:build !min` sources are
 // omitted and the link matches the minimal C library.
 
-package minload_test
+package testminimalruntime_test
 
 import (
 	"os"
@@ -23,11 +23,11 @@ import (
 func TestWasmtimeMinAOT_Load(t *testing.T) {
 	dir := os.Getenv("WASMTIME_TEST_AOT_DIR")
 	if dir == "" {
-		dir = "test-wasmtime-min"
+		dir = filepath.Join("ci", "test-minimal-runtime")
 	}
 	path := filepath.Join(dir, "module.cwasm")
 	if _, err := os.Stat(path); err != nil {
-		t.Skipf("missing %s (run TestWasmtimeMinAOT_Produce or ci/test-wasmtime-min.sh first): %v", path, err)
+		t.Skipf("missing %s (run TestWasmtimeMinAOT_Produce or ci/test-minimal-runtime/compile_and_run.sh first): %v", path, err)
 	}
 
 	cfg := wasmtime.NewConfig()

@@ -1,4 +1,4 @@
 build
 /bazel-*
 test-vendoring-project
-test-wasmtime-min
+ci/test-minimal-runtime/module.cwasm
