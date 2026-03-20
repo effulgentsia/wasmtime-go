@@ -10,7 +10,7 @@ import (
 	"github.com/bytecodealliance/wasmtime-go/v42"
 )
 
-func TestWasmtimeMinAOT_Load(t *testing.T) {
+func TestRun(t *testing.T) {
 	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
 	engine := wasmtime.NewEngineWithConfig(cfg)

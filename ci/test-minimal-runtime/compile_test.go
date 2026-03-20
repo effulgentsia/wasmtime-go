@@ -11,7 +11,7 @@ import (
 	"github.com/bytecodealliance/wasmtime-go/v42"
 )
 
-func TestWasmtimeMinAOT_Produce(t *testing.T) {
+func TestCompile(t *testing.T) {
 	wasm, err := wasmtime.Wat2Wasm(`(module (func (export "test")))`)
 	require.NoError(t, err)
 
