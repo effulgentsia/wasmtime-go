@@ -1,5 +1,11 @@
 //go:build min
 
+// External tests for package wasmtime. The import path matches go.mod’s module
+// path; it refers to this repository’s root package, not a remote version.
+// Running `go test -tags min ./minload/` compiles github.com/.../wasmtime-go/v42
+// (the parent module) with the `min` build tag, so `//go:build !min` sources are
+// omitted and the link matches the minimal C library.
+
 package minload_test
 
 import (
