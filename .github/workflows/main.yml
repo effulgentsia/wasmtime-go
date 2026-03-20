@@ -72,7 +72,7 @@ jobs:
       shell: bash
       run: ./ci/test-vendoring.sh
       if: runner.os != 'Windows'
-    - name: Test wasmtime min AOT on *nix
+    - name: Test the minimal runtime
       shell: bash
       run: ./ci/test-minimal-runtime/test.sh
       if: runner.os != 'Windows'
