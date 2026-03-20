@@ -22,20 +22,13 @@ By default this package expects a full Wasmtime C library with all features.
 A plain "go build" links against the full library and all functions are
 available.
 
-To link against a Wasmtime C library built without some or all features, use
-"no_feat_*" build tags to exclude the corresponding Go functions, preventing
-compilation errors due to the missing C functions.
+To link against a Wasmtime C library built without optional features (Wasmtime's
+minimal build), use the wasmtime_minimal build tag to exclude the corresponding
+Go bindings, preventing compilation errors due to the missing C functions.
 
-For example, to exclude the Go bindings for the cranelift feature:
+	go build -tags wasmtime_minimal
 
-	go build -tags no_feat_cranelift
-
-To exclude the Go bindings of all optional features (e.g., if linking against
-Wasmtime's minimal build):
-
-	go build -tags "no_feat_cranelift,no_feat_wat,no_feat_wasi,no_feat_cache,no_feat_parallel_compilation,no_feat_threads"
-
-The tags correspond to Wasmtime's Cargo features
+The tag corresponds to Wasmtime's Cargo features
 (see https://github.com/bytecodealliance/wasmtime/blob/main/crates/c-api/Cargo.toml).
 */
 package wasmtime

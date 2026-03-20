@@ -1,4 +1,4 @@
-//go:build !no_feat_cranelift
+//go:build !wasmtime_minimal
 
 package wasmtime
 
