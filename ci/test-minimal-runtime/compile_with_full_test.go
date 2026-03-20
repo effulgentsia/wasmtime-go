@@ -1,3 +1,5 @@
+//go:build !min
+
 package testminimalruntime_test
 
 import (
