@@ -3,14 +3,14 @@
 # minimal Wasmtime (Go build tag `min`) loads and runs it.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
 
 rm -rf test-wasmtime-min
 mkdir -p test-wasmtime-min
 export WASMTIME_TEST_AOT_DIR="$ROOT/test-wasmtime-min"
 
-go test -run '^TestWasmtimeMinAOT_Produce$' ./aotproduce/
-go test -tags min -run '^TestWasmtimeMinAOT_Load$' ./minload/
+go test -run '^TestWasmtimeMinAOT_Produce$' ./ci/test-minimal-runtime/
+go test -tags min -run '^TestWasmtimeMinAOT_Load$' ./ci/test-minimal-runtime/
 
-echo "test-wasmtime-min: success"
+echo "test-minimal-runtime: success"

@@ -1,4 +1,4 @@
-package aotproduce_test
+package testminimalruntime_test
 
 import (
 	"os"
