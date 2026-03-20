@@ -16,26 +16,13 @@ It's also worth pointing out that the authors of this package up to this point
 primarily work in Rust, so if you've got suggestions of how to make this package
 more idiomatic for Go we'd love to hear your thoughts!
 
-# Feature Build Tags
+# Full vs minimal Go API
 
-By default this package expects a full Wasmtime C library with all features.
-A plain "go build" links against the full library and all functions are
-available.
+A plain `go build` includes all Go bindings, useful if using the full Wasmtime
+binary.
 
-To link against a Wasmtime C library built without some or all features, use
-"no_feat_*" build tags to exclude the corresponding Go functions, preventing
-compilation errors due to the missing C functions.
-
-For example, to exclude the Go bindings for the cranelift feature:
-
-	go build -tags no_feat_cranelift
-
-To exclude the Go bindings of all optional features (e.g., if linking against
-Wasmtime's minimal build):
-
-	go build -tags "no_feat_cranelift,no_feat_wat,no_feat_wasi,no_feat_cache,no_feat_parallel_compilation,no_feat_threads"
-
-The tags correspond to Wasmtime's Cargo features
-(see https://github.com/bytecodealliance/wasmtime/blob/main/crates/c-api/Cargo.toml).
+`go build -tags min` omits Go bindings for optional Wasmtime features. This is
+necessary if using the minimal Wasmtime binary, since otherwise compilation
+fails due to the missing C functions.
 */
 package wasmtime
