@@ -7,15 +7,9 @@
 
 `ci/test-wasmtime-min.sh` runs both steps in order (same pattern as `test-vendoring.sh` in CI).
 
-## v42 limitation (engine / GC)
+The load path uses **`Config.SetGCSupport(false)`** so the engine does not require GC collectors shipped only in full Wasmtime builds.
 
-Wasmtime’s **minimal** static build does not ship GC collector implementations (`gc-drc`, `gc-null`). Creating an `Engine` can still hit Rust-side checks that require a collector when GC-related support is enabled at the engine level.
-
-In **v42** the C API does not expose a dedicated **GC collector / `gc_support` configuration** knob that would let minimal builds align the engine with what the precompiled artifact expects. That is expected to improve in **v43** (see project notes on `gc_support` / collector configuration).
-
-Until then, `go test -tags min -run '^TestWasmtimeMinAOT_Load$'` may **panic during engine creation** even though linking succeeds.
-
-The CI workflow step that runs `./ci/test-wasmtime-min.sh` uses **`continue-on-error: true`** so the rest of CI stays green while this integration is finalized against a newer Wasmtime release.
+The **produce** step configures the full compiler so the serialized artifact matches what the minimal runtime exposes: **`SetWasmThreads(false)`** and **`SetWasmComponentModel(false)`** (among **`SetGCSupport` / `SetWasmGC`**) so deserialization does not require threads or the component model, which the minimal build omits.
 
 ## Local use
 

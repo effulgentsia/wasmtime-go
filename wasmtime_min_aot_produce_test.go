@@ -23,7 +23,10 @@ func TestWasmtimeMinAOT_Produce(t *testing.T) {
 	require.NoError(t, err)
 
 	cfg := NewConfig()
+	cfg.SetGCSupport(false)
 	cfg.SetWasmGC(false)
+	cfg.SetWasmThreads(false)
+	cfg.SetWasmComponentModel(false)
 	engine := NewEngineWithConfig(cfg)
 	module, err := NewModule(engine, wasm)
 	require.NoError(t, err)

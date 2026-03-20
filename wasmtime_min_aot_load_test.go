@@ -3,11 +3,6 @@
 package wasmtime
 
 // Integration test: deserialize a .cwasm produced by TestWasmtimeMinAOT_Produce.
-//
-// Wasmtime v42 minimal builds can panic when creating an Engine (GC collector
-// availability). v43 is expected to add the C-side hooks needed to configure
-// this; until then this test documents intent and may fail at runtime even when
-// linking succeeds. See ci/wasmtime-min-aot.md.
 
 import (
 	"os"
@@ -30,6 +25,7 @@ func TestWasmtimeMinAOT_Load(t *testing.T) {
 	}
 
 	cfg := NewConfig()
+	cfg.SetGCSupport(false)
 	cfg.SetWasmGC(false)
 	engine := NewEngineWithConfig(cfg)
 	module, err := NewModuleDeserializeFile(engine, path)

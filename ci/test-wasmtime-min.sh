@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 # Two-step integration test: full Wasmtime produces a precompiled .cwasm artifact;
-# minimal Wasmtime (Go build tag `min`) loads and runs it.
-#
-# Known issue (Wasmtime v42): minimal static libs lack GC collectors; engine
-# creation for the load step may panic until the C API exposes the needed
-# gc_support / collector configuration (anticipated in v43). See ci/wasmtime-min-aot.md.
+# minimal Wasmtime (Go build tag `min`) loads and runs it (see ci/wasmtime-min-aot.md).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
