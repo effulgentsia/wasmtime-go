@@ -74,7 +74,7 @@ jobs:
       if: runner.os != 'Windows'
     - name: Test wasmtime min AOT on *nix
       shell: bash
-      run: ./ci/test-minimal-runtime/test.sh
+      run: ./ci/test-minimal-runtime/compile_and_run.sh
       if: runner.os != 'Windows'
 
   coverage:

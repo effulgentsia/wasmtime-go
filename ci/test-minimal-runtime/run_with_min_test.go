@@ -27,7 +27,7 @@ func TestWasmtimeMinAOT_Load(t *testing.T) {
 	}
 	path := filepath.Join(dir, "module.cwasm")
 	if _, err := os.Stat(path); err != nil {
-		t.Skipf("missing %s (run TestWasmtimeMinAOT_Produce or ci/test-minimal-runtime/test.sh first): %v", path, err)
+		t.Skipf("missing %s (run TestWasmtimeMinAOT_Produce or ci/test-minimal-runtime/compile_and_run.sh first): %v", path, err)
 	}
 
 	cfg := wasmtime.NewConfig()
