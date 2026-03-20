@@ -1,4 +1,4 @@
-//go:build !wasmtime_minimal
+//go:build !min
 
 package wasmtime
 

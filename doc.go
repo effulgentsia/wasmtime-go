@@ -21,7 +21,7 @@ more idiomatic for Go we'd love to hear your thoughts!
 A plain `go build` includes all Go bindings, useful if using the full Wasmtime
 binary.
 
-`go build -tags wasmtime_minimal` omits Go bindings for optional Wasmtime
+`go build -tags min` omits Go bindings for optional Wasmtime
 features, necessary if using the minimal Wasmtime binary, since otherwise
 compilation fails due to the missing C functions.
 */
