@@ -23,7 +23,7 @@ import (
 func TestWasmtimeMinAOT_Load(t *testing.T) {
 	dir := os.Getenv("WASMTIME_TEST_AOT_DIR")
 	if dir == "" {
-		dir = "test-wasmtime-min"
+		dir = filepath.Join("ci", "test-minimal-runtime")
 	}
 	path := filepath.Join(dir, "module.cwasm")
 	if _, err := os.Stat(path); err != nil {
