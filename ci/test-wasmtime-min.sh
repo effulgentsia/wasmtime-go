@@ -10,7 +10,7 @@ rm -rf test-wasmtime-min
 mkdir -p test-wasmtime-min
 export WASMTIME_TEST_AOT_DIR="$ROOT/test-wasmtime-min"
 
-go test -run '^TestWasmtimeMinAOT_Produce$' .
-go test -tags min -run '^TestWasmtimeMinAOT_Load$' .
+go test -run '^TestWasmtimeMinAOT_Produce$' ./aotproduce/
+go test -tags min -run '^TestWasmtimeMinAOT_Load$' ./minload/
 
 echo "test-wasmtime-min: success"

@@ -1,5 +1,3 @@
-//go:build !min
-
 package wasmtime
 
 import "testing"

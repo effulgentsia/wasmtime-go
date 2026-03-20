@@ -1,8 +1,6 @@
 //go:build min
 
-package wasmtime
-
-// Integration test: deserialize a .cwasm produced by TestWasmtimeMinAOT_Produce.
+package minload_test
 
 import (
 	"os"
@@ -10,6 +8,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/bytecodealliance/wasmtime-go/v42"
 )
 
 // TestWasmtimeMinAOT_Load deserializes module.cwasm produced by
@@ -24,16 +24,16 @@ func TestWasmtimeMinAOT_Load(t *testing.T) {
 		t.Skipf("missing %s (run TestWasmtimeMinAOT_Produce or ci/test-wasmtime-min.sh first): %v", path, err)
 	}
 
-	cfg := NewConfig()
+	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
 	cfg.SetWasmGC(false)
-	engine := NewEngineWithConfig(cfg)
-	module, err := NewModuleDeserializeFile(engine, path)
+	engine := wasmtime.NewEngineWithConfig(cfg)
+	module, err := wasmtime.NewModuleDeserializeFile(engine, path)
 	require.NoError(t, err)
 	defer module.Close()
 
-	store := NewStore(engine)
-	instance, err := NewInstance(store, module, []AsExtern{})
+	store := wasmtime.NewStore(engine)
+	instance, err := wasmtime.NewInstance(store, module, []wasmtime.AsExtern{})
 	require.NoError(t, err)
 
 	fn := instance.GetFunc(store, "test")

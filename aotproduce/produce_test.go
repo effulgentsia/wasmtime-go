@@ -1,6 +1,4 @@
-//go:build !min
-
-package wasmtime
+package aotproduce_test
 
 import (
 	"os"
@@ -8,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/bytecodealliance/wasmtime-go/v42"
 )
 
 // TestWasmtimeMinAOT_Produce compiles inline WAT and writes a serialized module
@@ -19,16 +19,16 @@ func TestWasmtimeMinAOT_Produce(t *testing.T) {
 	}
 	require.NoError(t, os.MkdirAll(dir, 0o755))
 
-	wasm, err := Wat2Wasm(`(module (func (export "test")))`)
+	wasm, err := wasmtime.Wat2Wasm(`(module (func (export "test")))`)
 	require.NoError(t, err)
 
-	cfg := NewConfig()
+	cfg := wasmtime.NewConfig()
 	cfg.SetGCSupport(false)
 	cfg.SetWasmGC(false)
 	cfg.SetWasmThreads(false)
 	cfg.SetWasmComponentModel(false)
-	engine := NewEngineWithConfig(cfg)
-	module, err := NewModule(engine, wasm)
+	engine := wasmtime.NewEngineWithConfig(cfg)
+	module, err := wasmtime.NewModule(engine, wasm)
 	require.NoError(t, err)
 	defer module.Close()
 
