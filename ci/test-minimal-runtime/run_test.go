@@ -25,6 +25,7 @@ func TestRun(t *testing.T) {
 	fn := instance.GetFunc(store, "test")
 	require.NotNil(t, fn)
 
-	_, err = fn.Call(store)
+	result, err := fn.Call(store)
 	require.NoError(t, err)
+	require.Equal(t, int32(1), result)
 }
