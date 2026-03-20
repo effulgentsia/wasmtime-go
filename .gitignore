@@ -1,3 +1,4 @@
 build
 /bazel-*
 test-vendoring-project
+test-wasmtime-min

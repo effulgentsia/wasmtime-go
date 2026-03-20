@@ -72,6 +72,10 @@ jobs:
       shell: bash
       run: ./ci/test-vendoring.sh
       if: runner.os != 'Windows'
+    - name: Test wasmtime min AOT on *nix
+      shell: bash
+      run: ./ci/test-wasmtime-min.sh
+      if: runner.os != 'Windows'
 
   coverage:
     runs-on: ubuntu-latest

@@ -137,10 +137,10 @@ func (cfg *Config) SetWasmGC(enabled bool) {
 	runtime.KeepAlive(cfg)
 }
 
-// SetWasmComponentModel configures whether the wasm component model proposal is
-// enabled.
-func (cfg *Config) SetWasmComponentModel(enabled bool) {
-	C.wasmtime_config_wasm_component_model_set(cfg.ptr(), C.bool(enabled))
+// SetGCSupport configures whether GC support is enabled in Wasmtime at all.
+// When false, engines can be used without a GC collector (e.g. minimal Wasmtime builds).
+func (cfg *Config) SetGCSupport(enabled bool) {
+	C.wasmtime_config_gc_support_set(cfg.ptr(), C.bool(enabled))
 	runtime.KeepAlive(cfg)
 }
 
