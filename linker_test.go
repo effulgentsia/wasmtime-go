@@ -214,6 +214,37 @@ func TestLinkerDefineUnknownImportsAsTraps(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestLinkerDefineUnknownImportsAsDefaultValues(t *testing.T) {
+	engine := NewEngine()
+	wasm, err := Wat2Wasm(`
+	    (module
+		(import "unknown" "f" (func (result i32)))
+		(func (export "run") (result i32) call 0)
+	    )
+	`)
+	require.NoError(t, err)
+	module, err := NewModule(engine, wasm)
+	require.NoError(t, err)
+
+	store := NewStore(engine)
+	linker := NewLinker(engine)
+	defer linker.Close()
+
+	_, err = linker.Instantiate(store, module)
+	require.Error(t, err)
+
+	err = linker.DefineUnknownImportsAsDefaultValues(store, module)
+	require.NoError(t, err)
+	instance, err := linker.Instantiate(store, module)
+	require.NoError(t, err)
+
+	run := instance.GetFunc(store, "run")
+	require.NotNil(t, run)
+	result, err := run.Call(store)
+	require.NoError(t, err)
+	require.Equal(t, int32(0), result)
+}
+
 func TestPanicInHostFunctionDuringInstantiate(t *testing.T) {
 	engine := NewEngine()
 	linker := NewLinker(engine)
