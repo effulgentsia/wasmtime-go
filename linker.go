@@ -211,6 +211,28 @@ func (l *Linker) DefineWasi() error {
 	return mkError(err)
 }
 
+// DefineUnknownImportsAsTraps defines all otherwise-missing imports of the
+// module as functions that immediately trap.
+//
+// This allows a module to be instantiated even when some of its imports are
+// not otherwise defined in this linker. Each missing function import will be
+// replaced with a stub that traps when called.
+//
+// Returns an error if the imports could not be defined.
+func (l *Linker) DefineUnknownImportsAsTraps(module *Module) error {
+	err := C.wasmtime_linker_define_unknown_imports_as_traps(
+		l.ptr(),
+		module.ptr(),
+	)
+	runtime.KeepAlive(l)
+	runtime.KeepAlive(module)
+	if err == nil {
+		return nil
+	}
+
+	return mkError(err)
+}
+
 // Instantiate instantiates a module with all imports defined in this linker.
 //
 // Returns an error if the instance's imports couldn't be satisfied, had the

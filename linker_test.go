@@ -182,6 +182,39 @@ func TestLinkerFuncs(t *testing.T) {
 	require.Equal(t, 6, called, "expected a call")
 }
 
+func TestLinkerDefineUnknownImportsAsTraps(t *testing.T) {
+	engine := NewEngine()
+	wasm, err := Wat2Wasm(`
+	    (module
+		(import "unknown" "f1" (func))
+		(import "unknown" "f2" (func (param i32) (result i32)))
+		(func (export "run") call 0)
+	    )
+	`)
+	require.NoError(t, err)
+	module, err := NewModule(engine, wasm)
+	require.NoError(t, err)
+
+	// Without DefineUnknownImportsAsTraps, instantiation should fail
+	store := NewStore(engine)
+	linker := NewLinker(engine)
+	defer linker.Close()
+	_, err = linker.Instantiate(store, module)
+	require.Error(t, err)
+
+	// After DefineUnknownImportsAsTraps, instantiation should succeed
+	err = linker.DefineUnknownImportsAsTraps(module)
+	require.NoError(t, err)
+	instance, err := linker.Instantiate(store, module)
+	require.NoError(t, err)
+
+	// Calling the stub should trap
+	run := instance.GetFunc(store, "run")
+	require.NotNil(t, run)
+	_, err = run.Call(store)
+	require.Error(t, err)
+}
+
 func TestPanicInHostFunctionDuringInstantiate(t *testing.T) {
 	engine := NewEngine()
 	linker := NewLinker(engine)
