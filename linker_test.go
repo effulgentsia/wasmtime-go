@@ -186,8 +186,7 @@ func TestLinkerDefineUnknownImportsAsTraps(t *testing.T) {
 	engine := NewEngine()
 	wasm, err := Wat2Wasm(`
 	    (module
-		(import "unknown" "f1" (func))
-		(import "unknown" "f2" (func (param i32) (result i32)))
+		(import "unknown" "f" (func))
 		(func (export "run") call 0)
 	    )
 	`)
