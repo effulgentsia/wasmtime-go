@@ -236,10 +236,6 @@ func (l *Linker) DefineUnknownImportsAsTraps(module *Module) error {
 // DefineUnknownImportsAsDefaultValues defines all otherwise-missing imports of
 // the module as values that return the default for their type.
 //
-// This is similar to DefineUnknownImportsAsTraps, but instead of trapping,
-// each missing function import returns the default value for its result types
-// (e.g. 0 for integers, 0.0 for floats).
-//
 // Returns an error if the imports could not be defined.
 func (l *Linker) DefineUnknownImportsAsDefaultValues(store Storelike, module *Module) error {
 	err := C.wasmtime_linker_define_unknown_imports_as_default_values(
