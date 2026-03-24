@@ -194,20 +194,17 @@ func TestLinkerDefineUnknownImportsAsTraps(t *testing.T) {
 	module, err := NewModule(engine, wasm)
 	require.NoError(t, err)
 
-	// Without DefineUnknownImportsAsTraps, instantiation should fail
 	store := NewStore(engine)
 	linker := NewLinker(engine)
 	defer linker.Close()
 	_, err = linker.Instantiate(store, module)
 	require.Error(t, err)
 
-	// After DefineUnknownImportsAsTraps, instantiation should succeed
 	err = linker.DefineUnknownImportsAsTraps(module)
 	require.NoError(t, err)
 	instance, err := linker.Instantiate(store, module)
 	require.NoError(t, err)
 
-	// Calling the stub should trap
 	run := instance.GetFunc(store, "run")
 	require.NotNil(t, run)
 	_, err = run.Call(store)
