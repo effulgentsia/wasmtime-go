@@ -18,8 +18,10 @@ more idiomatic for Go we'd love to hear your thoughts!
 
 # Full vs minimal Wasmtime binary
 
-When using the minimal Wasmtime binary, use `go build -tags min` so that CGO
-links against the minimal static library. The Go source files for optional
-features are still compiled, but unused symbols are eliminated by the linker.
+To use the minimal Wasmtime binary, place the minimal libwasmtime.a at the
+standard build path (e.g. build/linux-x86_64/libwasmtime.a) and remove the Go
+source files that reference C functions absent from the minimal binary
+(wat2wasm.go, wasi.go, and the *_feat_*.go files). See
+ci/test-minimal-runtime/test.sh for an example using vendoring.
 */
 package wasmtime

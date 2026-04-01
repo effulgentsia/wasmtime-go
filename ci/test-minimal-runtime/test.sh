@@ -55,9 +55,10 @@ func check(err error) {
 GOEOF
 go run create_cwasm.go
 
-# Step 2: Vendor the module, then remove files that require the full Wasmtime
-# binary. This lets us compile against the minimal library without needing
-# build tags on every feature file.
+# Step 2: Vendor the module, then adjust the vendored copy so it compiles
+# against the minimal Wasmtime library:
+#   a) Remove Go source files that call C functions absent from the min binary.
+#   b) Copy the min static library over the full one so CGO links the right lib.
 go mod vendor
 VENDOR_PKG="vendor/${MODULE_PATH}"
 rm -f "$VENDOR_PKG"/wat2wasm.go
@@ -67,6 +68,12 @@ rm -f "$VENDOR_PKG"/module_feat_*.go
 rm -f "$VENDOR_PKG"/module_feats_*.go
 rm -f "$VENDOR_PKG"/linker_feat_*.go
 rm -f "$VENDOR_PKG"/store_feat_*.go
+for dir in "$VENDOR_PKG"/build/*-min; do
+	target="${dir%-min}"
+	if [ -d "$target" ]; then
+		cp -f "$dir"/* "$target"/
+	fi
+done
 
 # Step 3: Test that the minimal Wasmtime binary can deserialize and run a module.
 cat > min_test.go <<GOEOF
@@ -100,4 +107,4 @@ func TestMinimalRuntime(t *testing.T) {
 	require.Equal(t, int32(1), result)
 }
 GOEOF
-go test -count=1 -tags min .
+go test -count=1 .
