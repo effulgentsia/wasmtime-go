@@ -3,6 +3,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MODULE_PATH=$(awk '/^module /{print $2}' "$REPO_ROOT/go.mod")
+WASMTIME_VERSION=$(python3 -c "exec(open('$REPO_ROOT/ci/download-wasmtime.py').read()); print(version)")
 
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
@@ -55,7 +56,19 @@ func check(err error) {
 GOEOF
 go run create_cwasm.go
 
-# Step 2: Vendor the module, then adjust the vendored copy so it compiles
+# Step 2: Download the minimal Wasmtime static library for the current platform.
+case "$(uname -s)-$(uname -m)" in
+	Linux-x86_64)  ARCHIVE="wasmtime-${WASMTIME_VERSION}-x86_64-linux-c-api.tar.xz";  BUILD_DIR="linux-x86_64";;
+	Linux-aarch64) ARCHIVE="wasmtime-${WASMTIME_VERSION}-aarch64-linux-c-api.tar.xz"; BUILD_DIR="linux-aarch64";;
+	Darwin-x86_64) ARCHIVE="wasmtime-${WASMTIME_VERSION}-x86_64-macos-c-api.tar.xz";  BUILD_DIR="macos-x86_64";;
+	Darwin-arm64)  ARCHIVE="wasmtime-${WASMTIME_VERSION}-aarch64-macos-c-api.tar.xz"; BUILD_DIR="macos-aarch64";;
+	*) echo "Unsupported platform: $(uname -s)-$(uname -m)" >&2; exit 1;;
+esac
+URL="https://github.com/bytecodealliance/wasmtime/releases/download/${WASMTIME_VERSION}/${ARCHIVE}"
+echo "Downloading min library from ${URL}"
+curl -sSLf "$URL" | tar xJ --strip-components=2 "${ARCHIVE%.tar.xz}/min/lib"
+
+# Step 3: Vendor the module, then adjust the vendored copy so it compiles
 # against the minimal Wasmtime library:
 #   a) Remove Go source files that call C functions absent from the min binary.
 #   b) Copy the min static library over the full one so CGO links the right lib.
@@ -68,14 +81,9 @@ rm -f "$VENDOR_PKG"/module_feat_*.go
 rm -f "$VENDOR_PKG"/module_feats_*.go
 rm -f "$VENDOR_PKG"/linker_feat_*.go
 rm -f "$VENDOR_PKG"/store_feat_*.go
-for dir in "$VENDOR_PKG"/build/*-min; do
-	target="${dir%-min}"
-	if [ -d "$target" ]; then
-		cp -f "$dir"/* "$target"/
-	fi
-done
+cp -f lib/libwasmtime.a "$VENDOR_PKG/build/${BUILD_DIR}/libwasmtime.a"
 
-# Step 3: Test that the minimal Wasmtime binary can deserialize and run a module.
+# Step 4: Test that the minimal Wasmtime binary can deserialize and run a module.
 cat > min_test.go <<GOEOF
 package testminimalruntime_test
 
