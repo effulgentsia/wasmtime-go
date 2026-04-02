@@ -3,9 +3,10 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 MODULE_PATH=$(awk '/^module /{print $2}' "$REPO_ROOT/go.mod")
-MAJOR_VERSION=$(echo "$MODULE_PATH" | grep -oP '\d+$' || echo "0")
+MAJOR_VERSION=$(echo "$MODULE_PATH" | sed -n 's/.*[^0-9]\([0-9]*\)$/\1/p')
+MAJOR_VERSION="${MAJOR_VERSION:-0}"
 PLACEHOLDER="v${MAJOR_VERSION}.0.0-placeholder"
-WASMTIME_VERSION=$(grep -oP "^version\s*=\s*'\K[^']+" "$REPO_ROOT/ci/download-wasmtime.py")
+WASMTIME_VERSION=$(sed -n "s/^version[[:space:]]*=[[:space:]]*'\\([^']*\\)'.*/\\1/p" "$REPO_ROOT/ci/download-wasmtime.py")
 
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
