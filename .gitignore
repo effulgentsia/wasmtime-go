@@ -1,4 +1,3 @@
 build
 /bazel-*
 test-vendoring-project
-ci/test-minimal-runtime/module.cwasm
