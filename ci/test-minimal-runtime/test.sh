@@ -6,13 +6,9 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MODULE_PATH=$(awk '/^module /{print $2}' "$REPO_ROOT/go.mod")
 MAJOR_VERSION=$(echo "$MODULE_PATH" | grep -oP '\d+$' || echo "0")
 PLACEHOLDER="v${MAJOR_VERSION}.0.0-placeholder"
-WORK_DIR=$(mktemp -d)
-trap 'rm -rf "$WORK_DIR"' EXIT
-cd "$WORK_DIR"
 
-# Copy the static Go source files.
-cp "$SCRIPT_DIR/create_cwasm.go" .
-cp "$SCRIPT_DIR/min_test.go" .
+cd "$SCRIPT_DIR"
+trap 'rm -rf go.mod go.sum vendor build module.cwasm' EXIT
 
 go mod init test-minimal-runtime
 cat >> go.mod <<EOF
