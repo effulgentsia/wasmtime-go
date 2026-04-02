@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-cd "$SCRIPT_DIR"
+cd "$(dirname "$0")"
 trap 'rm -rf vendor build module.cwasm' EXIT
 
 # Step 1: Create a pre-compiled module using the full Wasmtime library.
 go run create_cwasm.go
 
 # Step 2: Download the minimal Wasmtime static libraries.
-python3 "$REPO_ROOT/ci/download-wasmtime.py" --min
+python3 ../download-wasmtime.py --min
 
 # Step 3: Vendor the module, then adjust the vendored copy so it compiles
 # against the minimal Wasmtime library:
