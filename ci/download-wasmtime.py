@@ -55,7 +55,7 @@ for i, arr in enumerate(urls):
     if i == 0:
         shutil.copytree(src + '/include', 'build/include', dirs_exist_ok=True)
 
-    lib_src = src + '/lib/min' if args.min else src + '/lib'
+    lib_src = src + '/min/lib' if args.min else src + '/lib'
     shutil.copytree(lib_src, 'build/' + dirname, dirs_exist_ok=True)
     shutil.rmtree(src)
 
