@@ -15,13 +15,5 @@ https://github.com/bytecodealliance/wasmtime-go/issues/new.
 It's also worth pointing out that the authors of this package up to this point
 primarily work in Rust, so if you've got suggestions of how to make this package
 more idiomatic for Go we'd love to hear your thoughts!
-
-# Full vs minimal Wasmtime binary
-
-To use the minimal Wasmtime binary, place the minimal libwasmtime.a at the
-standard build path (e.g. build/linux-x86_64/libwasmtime.a) and remove the Go
-source files that reference C functions absent from the minimal binary
-(wat2wasm.go, wasi.go, and the *_feat_*.go files). See
-ci/test-minimal-runtime/test.sh for an example using vendoring.
 */
 package wasmtime
