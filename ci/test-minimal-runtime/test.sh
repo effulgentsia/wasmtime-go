@@ -3,8 +3,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-MODULE_PATH=$(awk '/^module /{print $2}' "$REPO_ROOT/go.mod")
-
 cd "$SCRIPT_DIR"
 trap 'rm -rf vendor build module.cwasm' EXIT
 
@@ -19,7 +17,7 @@ python3 "$REPO_ROOT/ci/download-wasmtime.py" --min
 #   a) Remove Go source files that call C functions absent from the min binary.
 #   b) Copy the min static libraries over the full ones so CGO links the right lib.
 go mod vendor
-VENDOR_PKG="vendor/${MODULE_PATH}"
+VENDOR_PKG="vendor/github.com/bytecodealliance/wasmtime-go/v43"
 rm -f "$VENDOR_PKG"/wat2wasm.go
 rm -f "$VENDOR_PKG"/wasi.go
 rm -f "$VENDOR_PKG"/config_feat_*.go
