@@ -51,7 +51,6 @@ for i, arr in enumerate(urls):
         shutil.copytree(src + '/include', 'build/include', dirs_exist_ok=True)
 
     shutil.copytree(src + '/lib', 'build/' + dirname, dirs_exist_ok=True)
-    shutil.copytree(src + '/min/lib', 'build/' + dirname + '-min', dirs_exist_ok=True)
     shutil.rmtree(src)
 
 for dylib in glob.glob("build/**/*.dll"):

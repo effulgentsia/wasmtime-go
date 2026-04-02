@@ -16,13 +16,12 @@ It's also worth pointing out that the authors of this package up to this point
 primarily work in Rust, so if you've got suggestions of how to make this package
 more idiomatic for Go we'd love to hear your thoughts!
 
-# Full vs minimal Go API
+# Full vs minimal Wasmtime binary
 
-A plain `go build` includes all Go bindings, useful if using the full Wasmtime
-binary.
-
-`go build -tags min` omits Go bindings for optional Wasmtime features. This is
-necessary if using the minimal Wasmtime binary, since otherwise compilation
-fails due to the missing C functions.
+To use the minimal Wasmtime binary, place the minimal libwasmtime.a at the
+standard build path (e.g. build/linux-x86_64/libwasmtime.a) and remove the Go
+source files that reference C functions absent from the minimal binary
+(wat2wasm.go, wasi.go, and the *_feat_*.go files). See
+ci/test-minimal-runtime/test.sh for an example using vendoring.
 */
 package wasmtime
