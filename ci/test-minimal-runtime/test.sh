@@ -4,18 +4,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MODULE_PATH=$(awk '/^module /{print $2}' "$REPO_ROOT/go.mod")
-MAJOR_VERSION=$(echo "$MODULE_PATH" | grep -oP '\d+$' || echo "0")
-PLACEHOLDER="v${MAJOR_VERSION}.0.0-placeholder"
 
 cd "$SCRIPT_DIR"
-trap 'rm -rf go.mod go.sum vendor build module.cwasm' EXIT
-
-go mod init test-minimal-runtime
-cat >> go.mod <<EOF
-require "$MODULE_PATH" ${PLACEHOLDER}
-replace "$MODULE_PATH" ${PLACEHOLDER} => "$REPO_ROOT"
-EOF
-go mod tidy
+trap 'rm -rf vendor build module.cwasm' EXIT
 
 # Step 1: Create a pre-compiled module using the full Wasmtime library.
 go run create_cwasm.go
